@@ -11,11 +11,28 @@
     <a asp-page="/BookPages/Create">Create New</a>
 </p>
 
+<form asp-page ="./Index" method ="get">
+    <div class ="form-actions no-color">
+        <p>
+            Find by Book Title / Author Name:
+            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+            <a asp-page="./Index">Back to full List </a>
+            </p>
+        </div>
+    </form>
+
 <table class="table">
     <thead>
         <tr>
-            <th>Book Title</th>
-            <th>Author</th>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.TitleSort"
+                   asp-route-currentFilter="@Model.CurrentFilter">Book Title</a>
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.AuthorSort"
+                   asp-route-currentFilter="@Model.CurrentFilter">Author</a>
+            </th>
             <th>Price</th>
             <th>PublishingDate</th>
             <th>Publisher</th>
@@ -23,6 +40,7 @@
             <th></th>
         </tr>
     </thead>
+
     <tbody>
         @foreach (var item in Model.BookD.Books)
         {

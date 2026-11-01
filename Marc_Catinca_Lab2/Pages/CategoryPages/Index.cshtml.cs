@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Marc_Catinca_Lab2.Models;
+using Marc_Catinca_Lab2.Models.ViewModels;
 
 namespace Marc_Catinca_Lab2.Pages.CategoryPages;
 
@@ -14,10 +15,27 @@ public class IndexModel : PageModel
         _context = context;
     }
 
-    public IList<Category> Category { get; set; } = default!;
+    public CategoryIndexData CategoryData { get; set; } = default!;
+    public int CategoryID { get; set; }
 
-    public async Task OnGetAsync()
+    public async Task OnGetAsync(int? id)
     {
-        Category = await _context.Category.ToListAsync();
+        CategoryData = new CategoryIndexData();
+
+        CategoryData.Categories = await _context.Category
+            .Include(c => c.BookCategories)
+                .ThenInclude(bc => bc.Book)
+                    .ThenInclude(b => b.Author)
+            .OrderBy(c => c.CategoryName)
+            .ToListAsync();
+
+        if (id != null)
+        {
+            CategoryID = id.Value;
+            Category category = CategoryData.Categories
+                .Where(c => c.ID == id.Value).Single();
+            CategoryData.Books = category.BookCategories?
+                .Select(bc => bc.Book).ToList() ?? new List<Book>();
+        }
     }
 }
