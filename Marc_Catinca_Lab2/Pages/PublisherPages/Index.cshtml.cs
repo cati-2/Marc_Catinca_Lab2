@@ -1,3 +1,4 @@
+using Marc_Catinca_Lab2.Data;
 using Marc_Catinca_Lab2.Models;
 using Marc_Catinca_Lab2.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;

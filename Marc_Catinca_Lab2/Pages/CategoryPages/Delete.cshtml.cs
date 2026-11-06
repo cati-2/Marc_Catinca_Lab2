@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Marc_Catinca_Lab2.Models;
+using Marc_Catinca_Lab2.Data;
 
 namespace Marc_Catinca_Lab2.Pages.CategoryPages;
 

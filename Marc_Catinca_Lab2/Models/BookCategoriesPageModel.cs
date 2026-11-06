@@ -1,4 +1,5 @@
-﻿using Marc_Catinca_Lab2.Models;
+﻿using Marc_Catinca_Lab2.Data;
+using Marc_Catinca_Lab2.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Marc_Catinca_Lab2.Pages.BookPages
 {
