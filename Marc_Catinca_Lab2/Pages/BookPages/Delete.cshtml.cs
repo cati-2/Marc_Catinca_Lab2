@@ -3,59 +3,63 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Marc_Catinca_Lab2.Models;
 using Marc_Catinca_Lab2.Data;
+using Microsoft.AspNetCore.Authorization;
 
-namespace Marc_Catinca_Lab2.Pages.BookPages;
-
-public class DeleteModel : PageModel
+namespace Marc_Catinca_Lab2.Pages.BookPages
 {
-    private readonly Marc_Catinca_Lab2Context _context;
 
-    public DeleteModel(Marc_Catinca_Lab2Context context)
+    [Authorize(Roles = "Admin")]
+    public class DeleteModel : PageModel
     {
-        _context = context;
-    }
+        private readonly Marc_Catinca_Lab2Context _context;
 
-    [BindProperty]
-    public Book Book { get; set; } = default!;
-
-    public async Task<IActionResult> OnGetAsync(int? id)
-    {
-        if (id is null)
+        public DeleteModel(Marc_Catinca_Lab2Context context)
         {
-            return NotFound();
+            _context = context;
         }
 
-        var book = await _context.Book
-            .Include(b => b.Publisher)
-            .Include(b => b.Author)
-            .FirstOrDefaultAsync(m => m.ID == id);
-        if (book is null)
-        {
-            return NotFound();
-        }
-        else
-        {
-            Book = book;
-        }
+        [BindProperty]
+        public Book Book { get; set; } = default!;
 
-        return Page();
-    }
-
-    public async Task<IActionResult> OnPostAsync(int? id)
-    {
-        if (id is null)
+        public async Task<IActionResult> OnGetAsync(int? id)
         {
-            return NotFound();
-        }
+            if (id is null)
+            {
+                return NotFound();
+            }
 
-        var book = await _context.Book.FindAsync(id);
-        if (book != null)
-        {
-            Book = book;
-            _context.Book.Remove(Book);
-            await _context.SaveChangesAsync();
+            var book = await _context.Book
+                .Include(b => b.Publisher)
+                .Include(b => b.Author)
+                .FirstOrDefaultAsync(m => m.ID == id);
+            if (book is null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                Book = book;
+            }
+
+            return Page();
         }
 
-        return RedirectToPage("/Index");
+        public async Task<IActionResult> OnPostAsync(int? id)
+        {
+            if (id is null)
+            {
+                return NotFound();
+            }
+
+            var book = await _context.Book.FindAsync(id);
+            if (book != null)
+            {
+                Book = book;
+                _context.Book.Remove(Book);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToPage("/Index");
+        }
     }
 }
